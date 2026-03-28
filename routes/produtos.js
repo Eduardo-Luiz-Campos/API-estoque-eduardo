@@ -1,5 +1,5 @@
+//Define as constantes
 const express = require('express');
-const app = express();
 const router = express.Router();
 const fs = require('fs');
 
@@ -19,7 +19,7 @@ router.get('/:id', (req, res) => {  // Rota GET (ler) produto por ID
     const produtos = lerProdutos();
     const produto = produtos.find(a => a.id === id);
 
-    if (!produto) {
+    if (!produto) { //Verifica se existe o ID
         return res.status(404).json({
             erro: "produto não encontrado",
             mensagem: "Não existe nenhum produto com esse Id"
@@ -34,7 +34,7 @@ router.post('/', (req, res) => { //Rota POST (adicionar) ao registro de produtos
     const { nome, descricao, preco, quantidade, categoria } = req.body;
     const produtos = lerProdutos();
     const novo = {
-        id: alunos.length > 0 ? alunos[alunos.length - 1].id + 1 : 1 , 
+        id: alunos.length > 0 ? alunos[alunos.length - 1].id + 1 : 1 , //calcula o id certo
         nome,
         descricao,
         preco,
@@ -43,7 +43,7 @@ router.post('/', (req, res) => { //Rota POST (adicionar) ao registro de produtos
     };
 
     //Verifica se nome e preco existem e não estão vazios
-    if (!nome || preco === undefined || preco === null) {
+    if (!nome || preco === undefined || preco === null) { 
         return res.status(400).json({ 
             erro: "Campos obrigatórios faltando", 
             mensagem: "O 'nome' e o 'preco' devem ser informados" 
@@ -65,7 +65,7 @@ router.post('/', (req, res) => { //Rota POST (adicionar) ao registro de produtos
 
     fs.writeFileSync('./data/produtos.json', JSON.stringify(produtos, null, 2));
 
-    res.status(201).json(novo);
+    res.status(201).json(novo); //se der certo, envia essa mensagem com 201 e o novo valor
 });
 
 router.put(':id', (req, res) => { // Rota PUT (modificar) algum produto por ID
@@ -74,7 +74,7 @@ router.put(':id', (req, res) => { // Rota PUT (modificar) algum produto por ID
     const produtos = lerProdutos();
     const index= produtos.findIndex(a => a.id === id);
 
-    if (!index) {
+    if (!index) { //Verifica se existe pelo ID
         return res.status(404).json({
             erro: "produto não encontrado",
             mensagem: "Não existe nenhum produto com esse Id"
@@ -87,11 +87,11 @@ router.put(':id', (req, res) => { // Rota PUT (modificar) algum produto por ID
     res.json(produtos[index]);
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', (req, res) => {  //Rota DELETE (deletar) pelo ID
     const id = Number(req.params.id);
     const produtos = lerProdutos().filter(a => a.id !== id);
 
-    if (!produtos) {
+    if (!produtos) { //Verifica se Id existe
         return res.status(404).json({
             erro: "produto não encontrado",
             mensagem: "Não existe nenhum produto com esse Id"
@@ -102,4 +102,4 @@ router.delete('/:id', (req, res) => {
     res.json({ mensagem: 'Produto removido!' });
 });
 
-module.exports = router;
+module.exports = router; //Exporta as rotas
